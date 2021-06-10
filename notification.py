@@ -6,16 +6,6 @@ import os
 
 load_dotenv()
 
-def prep_data(data):
-	lista=[]
-	print(data)
-	
-	# for v in data.values:
-	# 	lista.append(v)
-	# return_val=pd.concat(lista, axis=0)
-	# print('se viene se viene')
-	# print(return_val)
-	return return_val
 
 def test(text="Estoy andando pedazo de tontolin"):
 	token = os.getenv("API_KEY")
