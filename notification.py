@@ -8,11 +8,14 @@ load_dotenv()
 
 def prep_data(data):
 	lista=[]
-	for k,v in data.items():
-		nodo= v.copy()
-		nodo["token"]=k
-		lista.append(nodo)
-	return pd.concat(lista)
+	print(data)
+	
+	# for v in data.values:
+	# 	lista.append(v)
+	# return_val=pd.concat(lista, axis=0)
+	# print('se viene se viene')
+	# print(return_val)
+	return return_val
 
 def test(text="Estoy andando pedazo de tontolin"):
 	token = os.getenv("API_KEY")
@@ -28,7 +31,8 @@ def test(text="Estoy andando pedazo de tontolin"):
 
 
 def main(data):
-	tablita=prep_data(data)
+	tablita=data
+	print(tablita)
 	token = os.getenv("API_KEY")
 	urlp = f"https://api.telegram.org/bot{token}"
 	try:

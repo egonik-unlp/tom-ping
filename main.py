@@ -9,13 +9,14 @@ def filter(data, params):
 	candidates=[]
 	for param in params:
 		offers=data[param['token']]
+		offers['token']=param['token']
 		offers= offers[
 			(offers['max_single_trans_amount'] > param['target']) &
 			(offers['min_single_trans_amount'] < param['target']) &
 			(offers['finish_rate'] >= param['finish_rate'])&
 			(offers['order_count'] >= param['order_count'])
 		]
-		print(offers)
+		# print(offers)
 		if offers.shape[0]==0:
 			pass
 		else:
@@ -33,12 +34,7 @@ def main():
 				'finish_rate':.80,
 				'order_count':20
 			},
-			{
-				'token':'BTC',
-				'target':5000,
-				'finish_rate':.20,
-				'order_count':1
-			}
+		
 		]
 		
 	# notification.test()
@@ -49,8 +45,10 @@ def main():
 		log=candidates[0].to_html()
 	else:
 		log=data['BTC'].to_html()
-	print('iteration->{}'.format(candidates))
+	# print('iteration->{}'.format(candidates))
 	
 	with open('falopa.html' , 'w') as file:
 		file.write(log)
 	
+if __name__=='__main__':
+	main()
