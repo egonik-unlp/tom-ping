@@ -1,6 +1,6 @@
 import requests as req
 import pandas as pd
-from notification import prep_data
+
 def main()->dict:
 	url= "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"
 
