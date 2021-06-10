@@ -27,10 +27,16 @@ def filter(data, params):
 def main():
 	params=[
 			{
-			'token':'USDT',
-			'target':40000,
-			'finish_rate':80,
-			'order_count':20
+				'token':'USDT',
+				'target':40000,
+				'finish_rate':80,
+				'order_count':20
+			},
+			{
+				'token':'BTC',
+				'target':5000,
+				'finish_rate':20,
+				'order_count':1
 			}
 		]
 		
