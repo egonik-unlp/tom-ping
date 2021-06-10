@@ -42,4 +42,4 @@ def consulta():
     nodo = v[v.price==v.price.min()].copy()
     nodo["token"]=k
     lista.append(nodo)
-    return pd.concat(lista, axis=0)
+  return pd.concat(lista, axis=0)
