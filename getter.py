@@ -36,10 +36,10 @@ def main()->dict:
 
 
 def consulta():
-    data=main()
-    lista=[]
-    for k,v in data.items():
-	nodo= v[v.price==v.price.min()].copy()
-	nodo["token"]=k
-	lista.append(nodo)
+  data=main()
+  lista=[]
+  for k,v in data.items():
+    nodo = v[v.price==v.price.min()].copy()
+    nodo["token"]=k
+    lista.append(nodo)
     return pd.concat(lista, axis=0)
