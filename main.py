@@ -40,12 +40,13 @@ def main():
 			}
 		]
 		
-	notification.test()
+	# notification.test()
 	data=getter.main()
 	candidates=filter(data, params)
 	if candidates:
 		notification.main(candidates)
 	print('iteration->{}'.format(candidates))
-
+	with open('falopa.html' , 'w') as file:
+		file.write(candidates.to_html())
 
 

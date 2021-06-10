@@ -2,12 +2,13 @@ from numpy import load
 from dotenv import load_dotenv
 import requests as req
 import os
+import pandas as pd
 
 load_dotenv()
 
-def prep_data():
+def prep_data(data):
 	lista=[]
-	for k,v in data_tokens.items():
+	for k,v in data.items():
 		nodo= v[v.price==v.price.min()].copy()
 		nodo["token"]=k
 		lista.append(nodo)

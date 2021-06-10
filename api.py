@@ -1,4 +1,4 @@
-from flask import request, Flask
+from flask import request, Flask, url_for, redirect, render_template
 import main
 import os
 import test
@@ -27,6 +27,7 @@ class Test_msj(Resource):
 
 
 def sensor():
+    _=notification.test('chupame bien la verga tom pero periodicamente')
     main.main()
     print("Scheduler is alive!")
 
@@ -38,9 +39,22 @@ sched.start()
 
 
 # Create routes
-api.add_resource(Query, '/')
+api.add_resource(Query, '/query')
 api.add_resource(Test, '/test')
 api.add_resource(Test_msj, '/test_msj')
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect(url_for('static', filename='favicon.ico'))
+@app.route('/')
+def home():
+    return render_template('view.html', tables=[getter.consulta().to_html(classes='cripto')] , titles=['las kripto eee'])
+@app.route('/ultima_notificacion')
+def ultima_notificacion():
+    with open('falopa.html') as file:
+        retv=file.read()
+    return retv
+
 
 # Run the application
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import requests as req
 import pandas as pd
-
+from notification import prep_data
 def main()->dict:
 	url= "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"
 
@@ -34,9 +34,7 @@ def main()->dict:
 		data_tokens[token]= pd.concat((pd.DataFrame(product),pd.DataFrame(seller)), axis=1)
 	return data_tokens
 
+
 def consulta():
-	data=main()
-	ret={}
-	for k,v in data.items():
-		ret[k]=v.to_json()
-	return ret
+    data=main()
+    return prep_data(data)
