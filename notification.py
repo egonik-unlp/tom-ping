@@ -1,15 +1,15 @@
 from numpy import load
 from dotenv import load_dotenv
 import requests as req
-import os
 import pandas as pd
+import os
 
 load_dotenv()
 
 def prep_data(data):
 	lista=[]
 	for k,v in data.items():
-		nodo= v[v.price==v.price.min()].copy()
+		nodo= v.copy()
 		nodo["token"]=k
 		lista.append(nodo)
 	return pd.concat(lista)
@@ -31,6 +31,12 @@ def main(data):
 	tablita=prep_data(data)
 	token = os.getenv("API_KEY")
 	urlp = f"https://api.telegram.org/bot{token}"
+	try:
+		package="\n\n".join(["\n".join([f"{x} = {str(z)}" for x,z in v.iteritems()]) for k,v in tablita.iterrows()])
+	except AttributeError:
+		package="\n".join([f"{x} = {str(z)}" for x,z in tablita.iteritems()])
 	params = {"chat_id": os.getenv("CHAT_ID"), 
-          "text":"\n\n".join(["\n".join([f"{x} = {str(z)}" for x,z in v.iteritems()]) for k,v in tablita.iterrows()])}
+          "text":package}
+
 	r = req.get(urlp + "/sendMessage", params=params)
+	return r
