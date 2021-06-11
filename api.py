@@ -27,7 +27,7 @@ class Test_msj(Resource):
 
 
 def sensor():
-    _=notification.test('chupame bien la verga tom pero periodicamente')
+    # _=notification.test('chupame bien la verga tom pero periodicamente')
     main.main()
     print("Scheduler is alive!")
 
