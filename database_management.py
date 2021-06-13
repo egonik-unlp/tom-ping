@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref
@@ -24,13 +25,33 @@ class Token(db.Model):
 class Offer(db.Model):
 	__tablename__="offer"
 	offer_id=db.Column(db.Integer, nullable=False, primary_key=True )
-	value_ars=db.Column(db.Float, nullable=False)
+	price=db.Column(db.Float, nullable=False)
 	date=db.Column(db.DateTime, nullable=False)
 	token_id=db.Column(db.Integer, db.ForeignKey("token.token_id"), nullable=False)
-	def __init__(self, value, token_id):
-		self.value_ars=value
+	user_name=db.Column(db.String, nullable=False)
+	user_id=db.Column(db.Integer, nullable=False)
+	finish_rate=db.Column(db.Float, nullable=False)
+	order_count=db.Column(db.Integer, nullable=False)
+	methods=db.Column(db.String, nullable=False)
+	max_single_trans_amount=db.Column(db.Float, nullable=False)
+	min_single_trans_amount=db.Column(db.Float, nullable=False)
+	available=db.Column(db.Float, nullable=False)
+
+	def __init__(self, price, token_id,user_name,
+	 		max_single_trans_amount, min_single_trans_amount, user_id, methods,
+			 finish_rate, order_count, available):
+		self.price=price
 		self.date=datetime.now()
 		self.token_id=token_id
+		self.user_name=user_name
+		self.user_id=user_id
+		self.max_single_trans_amount=max_single_trans_amount
+		self.min_single_trans_amount=min_single_trans_amount
+		self.order_count=order_count
+		self.methods=methods
+		self.finish_rate=finish_rate
+		self.available=available
+
 
 class Token_Value_Usd(db.Model):
 	__tablename__="token_value_usd"
