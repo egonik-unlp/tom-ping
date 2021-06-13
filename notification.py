@@ -24,13 +24,14 @@ def main(data):
 	tablita=data
 	print(tablita)
 	token = os.getenv("API_KEY")
-	urlp = f"https://api.telegram.org/bot{token}"
-	try:
-		package="\n\n".join(["\n".join([f"{x} = {str(z)}" for x,z in v.iteritems()]) for k,v in tablita.iterrows()])
-	except AttributeError:
-		package="\n".join([f"{x} = {str(z)}" for x,z in tablita.iteritems()])
-	params = {"chat_id": os.getenv("CHAT_ID"), 
-          "text":package}
+	for chat_id in (os.getenv("CHAT_ID"), os.getenv("CHAT_ID1")):
+		urlp = f"https://api.telegram.org/bot{token}"
+		try:
+			package="\n\n".join(["\n".join([f"{x} = {str(z)}" for x,z in v.iteritems()]) for k,v in tablita.iterrows()])
+		except AttributeError:
+			package="\n".join([f"{x} = {str(z)}" for x,z in tablita.iteritems()])
+		params = {"chat_id": os.getenv("CHAT_ID"), 
+		"text":package}
 
-	r = req.get(urlp + "/sendMessage", params=params)
+		r = req.get(urlp + "/sendMessage", params=params)
 	return r
