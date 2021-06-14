@@ -11,6 +11,7 @@ def filter(data, params):
 		offers=data[param['token']]
 		offers['token']=param['token']
 		offers= offers[
+			(offers['price'] < param['price']) &
 			(offers['max_single_trans_amount'] > param['target']) &
 			(offers['min_single_trans_amount'] < param['target']) &
 			(offers['finish_rate'] >= param['finish_rate'])&
@@ -25,16 +26,18 @@ def filter(data, params):
 		return pd.concat(candidates, axis=0), True
 	else:
 		return 'Void', False
-	
+
+
 def main():
 	params=[
 			{
 				'token':'USDT',
+				'price':161,
 				'target':40000,
 				'finish_rate':.80,
 				'order_count':20
 			},
-		
+	
 		]
 		
 	# notification.test()

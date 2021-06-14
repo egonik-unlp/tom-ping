@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests as req
 import pandas as pd
 from database_management import db, Token, Offer
@@ -33,15 +34,21 @@ def main()->dict:
 				})
 		data_tokens[token]=data
 	return data_tokens
+
 def store_query_in_db():
 	data=main()
+	r,h=[],[]
 	for keys, values in data.items():
 		db_id=Token.query.filter_by(name=keys).with_entities(Token.token_id).first()[0]
 		for value in values:
-			offer= Offer(**value,token_id= db_id)
-			db.session.add(offer)
+			if Offer.query.filter_by(**value).all():
+				pass
+			else:
+				offer= Offer(**value,token_id= db_id)
+				h.append(Offer.query.filter_by(**value).all())
+				db.session.add(offer)
+				print('wrote an offer, {}'.format(offer.user_name))
 		db.session.commit()
-		
 
 def consulta():
   data=main()
@@ -55,4 +62,4 @@ def consulta():
 
 
 if __name__=="__main__":
-	store_query_in_db()
+	q=store_query_in_db()
