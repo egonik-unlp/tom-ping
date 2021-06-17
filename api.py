@@ -1,5 +1,6 @@
 from flask import request, Flask, url_for, redirect, render_template
 import main
+import exchange_rates
 import os
 import test
 import notification
@@ -27,12 +28,12 @@ class Test_msj(Resource):
 
 
 def sensor():
-    # _=notification.test('chupame bien la verga tom pero periodicamente')
     main.main()
     print("Scheduler is alive!")
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(sensor,'interval',minutes=15)
+sched.add_job(exchange_rates.main(), 'interval', minutes=60)
 sched.start()
 
 

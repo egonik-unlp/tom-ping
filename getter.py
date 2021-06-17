@@ -1,5 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from datetime import date as _date
+
 import requests as req
+from sqlalchemy import extract
 import pandas as pd
 from database_management import db, Token, Offer
 
@@ -36,19 +39,52 @@ def main()->dict:
 	return data_tokens
 
 def store_query_in_db():
+	try:
+		first_database_id= Offer.query.order_by(Offer.offer_id.desc()).first().offer_id
+	except AttributeError:
+		first_database_id=0
+	print(first_database_id)
+	new_values=[]
 	data=main()
-	r,h=[],[]
 	for keys, values in data.items():
 		db_id=Token.query.filter_by(name=keys).with_entities(Token.token_id).first()[0]
 		for value in values:
-			if Offer.query.filter_by(**value).all():
-				pass
+			matching_values_in_db=Offer.query.filter(Offer.price == value["price"],
+								Offer.user_name==value["user_name"],
+								Offer.min_single_trans_amount == value["min_single_trans_amount"]
+								)
+			if matching_values_in_db.count():
+				offers_from_today=matching_values_in_db.filter(
+                			extract('year', Offer.date) == _date.today().year,
+                			extract('month', Offer.date) == _date.today().month,
+               				 extract('day', Offer.date) == _date.today().day)
+				if offers_from_today.count() == 0:
+					offer=Offer(**value, token_id=db_id)
+					db.session.add(offer)
+					new_values.append(offer)
+					print("wrote an offer, {}, alternative path".format(offer.user_name))
+				else:
+					for updated_offer in offers_from_today.all():
+						updated_offer.datetime=datetime.now()
+						db.session.add(updated_offer)
+						print("Updated values for offer by = {}".format(updated_offer.user_name))
 			else:
 				offer= Offer(**value,token_id= db_id)
-				h.append(Offer.query.filter_by(**value).all())
 				db.session.add(offer)
-				print('wrote an offer, {}'.format(offer.user_name))
+				new_values.append(offer)
+				print('wrote an offer, {} of token {} '.format(offer.user_name, Token.query.with_entities(Token.name).filter_by(token_id=offer.token_id).first()[0]))
 		db.session.commit()
+	try:
+		last_database_id= offer.offer_id
+	except UnboundLocalError:
+		print('No escribí datos nuevos')
+		last_database_id=first_database_id
+	print(last_database_id)
+
+	return Offer.query.filter(Offer.offer_id > first_database_id).filter(Offer.offer_id <= last_database_id)
+
+
+
 
 def consulta():
   data=main()

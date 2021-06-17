@@ -1,6 +1,7 @@
 from numpy import load
 from dotenv import load_dotenv
 import requests as req
+from database_management import Offer, Token, Token_Value_Usd, db
 import pandas as pd
 import os
 
@@ -34,4 +35,20 @@ def main(data):
 		"text":package}
 
 		r = req.get(urlp + "/sendMessage", params=params)
+	return r
+
+def from_db(selected_offers):
+	text=''
+	api_key=os.getenv("API_KEY")
+	
+	for offer in selected_offers:
+		text+='Token = {}\n'.format(Token.query.filter(Token.token_id==offer.token_id).first().name)
+		text+='Price = {}\n'.format(offer.price)
+		text+='User Name = {}\n'.format(offer.user_name)
+		text+='\n\n'
+	urlp = f"https://api.telegram.org/bot{api_key}"
+	params = {"chat_id": os.getenv("CHAT_ID"), 
+		"text":text}
+
+	r = req.get(urlp + "/sendMessage", params=params)
 	return r
